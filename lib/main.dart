@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-
+import 'package:websocket/User.dart';
+import 'dart:convert' as convert;
 void main2() async {
   var channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.6.112:8080?myid=234'));
 
   channel.stream.listen((message) {
-    channel.sink.add('received!');
+    print(message);
+    String fuck=convert.jsonEncode( User('id', 'toid', 'params').toJson());
+    print(fuck);
+    channel.sink.add(fuck);
     channel.sink.close(status.goingAway);
-  });
+  }, onError: (error) => print(error),);
 }
 void main() {
   main2();
